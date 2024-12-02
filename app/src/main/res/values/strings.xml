@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="bienvenida">Bienvenido al test</string>
+    <string name="presentacion">Las preguntas son sobre cualquier tema que a mis amigos se les ocurrio</string>
+    <string name="comenzar">Comenzar</string>
+    <string name="continuar">Continuar</string>
+    <string name="introducir_nombre">Introduzca su nombre</string>
+</resources>
