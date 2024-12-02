@@ -39,10 +39,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void insertarganador(String jugador, int puntuacion) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("nombre", jugador);
-        values.put("puntuacion", puntuacion);
-        db.insert("Ganadores", null, values);
+
+        // Verifico si el jugador ya existe
+        String query = "SELECT puntuacion FROM Ganadores WHERE nombre = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{jugador});
+
+        if (cursor.moveToFirst()) {
+            int puntuacionActual = cursor.getInt(0);
+
+            // si la nueva puntuacion es mejor la cambia
+            if (puntuacion > puntuacionActual) {
+                ContentValues values = new ContentValues();
+                values.put("puntuacion", puntuacion);
+                db.update("Ganadores", values, "nombre = ?", new String[]{jugador});
+            }
+        } else {
+            // Si el jugador no existe hace uno nuevo
+            ContentValues values = new ContentValues();
+            values.put("nombre", jugador);
+            values.put("puntuacion", puntuacion);
+            db.insert("Ganadores", null, values);
+        }
+
+        cursor.close();
         db.close();
     }
 
@@ -91,59 +110,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
     }
-    public String getPrimero() {
+    public List<String> obtenerTop3() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT nombre FROM Ganadores ORDER BY puntuacion DESC LIMIT 1";
+        List<String> topJugadores = new ArrayList<>();
+
+        String query = "SELECT nombre, puntuacion FROM Ganadores ORDER BY puntuacion DESC LIMIT 3";
         Cursor cursor = db.rawQuery(query, null);
-        String nombreJugador = "";
 
-        // Verificamos si el cursor tiene resultados
-        if (cursor.moveToFirst() && !cursor.isNull(0)) {
-            // Obtenemos el valor de la columna 'nombre'
-            nombreJugador = cursor.getString(0); // Índice 0 porque solo seleccionamos 'nombre'
-        }
-
-        // Cerramos el cursor y la base de datos
-        cursor.close();
-        db.close();
-
-        return nombreJugador; // Retornamos el nombre del jugador con mayor puntuación
-    }
-    public String getSegundo() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT nombre FROM Ganadores ORDER BY puntuacion DESC LIMIT 1 OFFSET 1";
-        Cursor cursor = db.rawQuery(query, null);
-        String nombreJugador = "";
-
-        // Verificamos si el cursor tiene resultados
         if (cursor.moveToFirst()) {
-            // Obtenemos el valor de la columna 'nombre'
-            nombreJugador = cursor.getString(0); // Índice 0 porque solo seleccionamos 'nombre'
+            do {
+                String nombre = cursor.getString(0);
+                int puntuacion = cursor.getInt(1);
+                topJugadores.add(nombre + " - " + puntuacion);
+            } while (cursor.moveToNext());
         }
 
-        // Cerramos el cursor y la base de datos
         cursor.close();
         db.close();
 
-        return nombreJugador; // Retornamos el nombre del jugador con la segunda mayor puntuación
-    }
-    public String getTercero() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT nombre FROM Ganadores ORDER BY puntuacion DESC LIMIT 1 OFFSET 2";
-        Cursor cursor = db.rawQuery(query, null);
-        String nombreJugador = "";
-
-        // Verificamos si el cursor tiene resultados
-        if (cursor.moveToFirst()) {
-            // Obtenemos el valor de la columna 'nombre'
-            nombreJugador = cursor.getString(0); // Índice 0 porque solo seleccionamos 'nombre'
-        }
-
-        // Cerramos el cursor y la base de datos
-        cursor.close();
-        db.close();
-
-        return nombreJugador; // Retornamos el nombre del jugador con la tercera mayor puntuación
+        return topJugadores;
     }
 
 

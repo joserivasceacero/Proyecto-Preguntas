@@ -17,7 +17,7 @@ public class Pregunta extends AppCompatActivity {
 
     private TextView textEnunciado, textNumPregunta;
     private Button btnOpcion1, btnOpcion2, btnOpcion3, btnContinuar;
-    private List<Pregunto> preguntas;
+    private List<PreguntaObjeto> preguntas;
     private int preguntaActual = 0;
     private int puntos = 0;
     private String nombreUsuario;
@@ -35,27 +35,34 @@ public class Pregunta extends AppCompatActivity {
         btnOpcion2 = findViewById(R.id.btn_opcion2);
         btnOpcion3 = findViewById(R.id.btn_opcion3);
         btnContinuar = findViewById(R.id.btn_continuar);
-        imagePregunta = findViewById(R.id.imageView); // Inicializar el ImageView
+        imagePregunta = findViewById(R.id.imageView);
 
-        // Inicializar preguntas
+        // Inicializo las preguntas
         preguntas = crearPreguntas();
-
-        // Mostrar la primera pregunta
+        //Las muestro
         mostrarPregunta();
 
-        // Configurar eventos de clic para las opciones
-        View.OnClickListener opcionListener = new View.OnClickListener() {
+        btnOpcion1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verificarRespuesta((Button) v);
+                verificarRespuesta(btnOpcion1);
             }
-        };
+        });
 
-        btnOpcion1.setOnClickListener(opcionListener);
-        btnOpcion2.setOnClickListener(opcionListener);
-        btnOpcion3.setOnClickListener(opcionListener);
+        btnOpcion2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verificarRespuesta(btnOpcion2);
+            }
+        });
 
-        // Configurar evento para el botón Continuar
+        btnOpcion3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verificarRespuesta(btnOpcion3);
+            }
+        });
+
         btnContinuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,12 +83,12 @@ public class Pregunta extends AppCompatActivity {
 
     private void mostrarPregunta() {
         resetearBotones();
-        Pregunto pregunta = preguntas.get(preguntaActual);
+        PreguntaObjeto pregunta = preguntas.get(preguntaActual);
         textEnunciado.setText(pregunta.getEnunciado());
 
         textNumPregunta.setText((preguntaActual + 1) + "/" + preguntas.size());
 
-        String nombreImagen = "i" + (preguntaActual + 1); // Crear el nombre de la imagen (i1, i2, i3...)
+        String nombreImagen = "i" + (preguntaActual + 1);
         int imageResId = getResources().getIdentifier(nombreImagen, "drawable", getPackageName());
         imagePregunta.setImageResource(imageResId);
 
@@ -96,9 +103,8 @@ public class Pregunta extends AppCompatActivity {
         btnContinuar.setVisibility(View.GONE);
         habilitarBotones(true);
     }
-
     private void verificarRespuesta(Button botonSeleccionado) {
-        Pregunto pregunta = preguntas.get(preguntaActual);
+        PreguntaObjeto pregunta = preguntas.get(preguntaActual);
         String respuesta = botonSeleccionado.getText().toString();
         boolean esCorrecta = pregunta.getOpciones().get(respuesta);
 
@@ -107,11 +113,24 @@ public class Pregunta extends AppCompatActivity {
             puntos++;
         } else {
             botonSeleccionado.setBackgroundColor(ContextCompat.getColor(this, R.color.rojo));
+            // Metodo para mostrar la opcion correcta
+            mostrarRespuestaCorrecta(pregunta);
         }
 
-        // Deshabilitar botones y mostrar "Continuar"
+
         habilitarBotones(false);
         btnContinuar.setVisibility(View.VISIBLE);
+    }
+
+    private void mostrarRespuestaCorrecta(PreguntaObjeto pregunta) {
+        // Recorre las opciones y muestra la correcta
+        for (Button boton : new Button[]{btnOpcion1, btnOpcion2, btnOpcion3}) {
+            String textoBoton = boton.getText().toString();
+            if (pregunta.getOpciones().get(textoBoton)) {
+                boton.setBackgroundColor(ContextCompat.getColor(this, R.color.verde));
+                break;
+            }
+        }
     }
 
     private void habilitarBotones(boolean habilitar) {
@@ -126,30 +145,30 @@ public class Pregunta extends AppCompatActivity {
         btnOpcion3.setBackgroundColor(ContextCompat.getColor(this, R.color.base));
     }
 
-    private List<Pregunto> crearPreguntas() {
-        List<Pregunto> listaPreguntas = new ArrayList<>();
+    private List<PreguntaObjeto> crearPreguntas() {
+        List<PreguntaObjeto> listaPreguntas = new ArrayList<>();
 
-        Pregunto p1 = new Pregunto("¿Qué función tiene el infinitivo de esta frase en latín?: \n Homines ab inmortalibus ignem petebant sed in perpetuum servare nesciebant \n");
-        p1.agregarOpcion("complemento directo", true);
-        p1.agregarOpcion("sujeto", false);
-        p1.agregarOpcion("oración subordinada de infinitivo", false);
+        PreguntaObjeto p1 = new PreguntaObjeto("¿Qué función tiene el infinitivo de esta frase en latín?:\n Homines ab inmortalibus ignem petebant sed in perpetuum servare nesciebant \n");
+        p1.agregarOpcion("Complemento directo", true);
+        p1.agregarOpcion("Sujeto", false);
+        p1.agregarOpcion("Oración subordinada de infinitivo", false);
 
-        Pregunto p2 = new Pregunto("¿Cual de los siguientes tiburones es mas pequeño?");
+        PreguntaObjeto p2 = new PreguntaObjeto("¿Cual de los siguientes tiburones es mas pequeño?");
         p2.agregarOpcion("Tiburón toro", true);
         p2.agregarOpcion("Tiburón tigre ", false);
         p2.agregarOpcion("Tiburón ballena", false);
 
-        Pregunto p3 = new Pregunto("¿En el Honkai Star Rail el mejor personaje de Break es:");
+        PreguntaObjeto p3 = new PreguntaObjeto("¿En el Honkai Star Rail el mejor personaje de Break es:");
         p3.agregarOpcion("Firefly", true);
         p3.agregarOpcion("Himeko", false);
         p3.agregarOpcion("Boothill", false);
 
-        Pregunto p4 = new Pregunto("En que canción aparece la frase \"cogollo violeta como freezer\"");
+        PreguntaObjeto p4 = new PreguntaObjeto("En que canción aparece la frase: \"cogollo violeta como freezer\"");
         p4.agregarOpcion("Ayer me llamó mi ex", false);
-        p4.agregarOpcion("I wake Up i bake Up", true);
+        p4.agregarOpcion("I wake Up I bake Up", true);
         p4.agregarOpcion("HOLA PERDIDA", false);
 
-        Pregunto p5 = new Pregunto("¿Que personaje se sacrifico para conseguir unas manzanas en hora de aventuras?");
+        PreguntaObjeto p5 = new PreguntaObjeto("¿Que personaje se sacrifico para conseguir unas manzanas en hora de aventuras?");
         p5.agregarOpcion("Giuseppe", true);
         p5.agregarOpcion("Tronquitos", false);
         p5.agregarOpcion("Tiffany", false);
