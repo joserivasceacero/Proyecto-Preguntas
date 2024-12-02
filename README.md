@@ -14,7 +14,7 @@ La aplicación está formada por 3 *activities* e incluye funcionalidades de int
 
 1. **Pantallas estructuradas:**
    - **Pantalla de bienvenida:** Introducir el nombre del usuario.
-   - **1 pantalla de preguntas:**
+   - **Pantalla de preguntas:**
      - Una pregunta con 3 posibles respuestas (solo una correcta).
      - Una imagen representativa de la pregunta.
    - **Pantalla final:** Mostrará:
