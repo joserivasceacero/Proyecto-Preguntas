@@ -53,40 +53,17 @@ La aplicación está formada por 3 *activities* e incluye funcionalidades de int
 
 ---
 
-## 🔧 **Instalación**
-
-### Requisitos previos
-- **Entorno de desarrollo:** Android Studio.
-- **Versión mínima de Android:** API 21 (Android 5.0 Lollipop).
-- **Dependencias:**
-  - Agrega *Toasty* y cualquier otra biblioteca usada al archivo `build.gradle`.
-
-### Pasos de instalación
-1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/juego-preguntas.git
-   ```
-2. Abre el proyecto en Android Studio.
-3. Sincroniza el proyecto con *Gradle* para instalar las dependencias.
-4. Compila y ejecuta la aplicación en un emulador o dispositivo físico.
-
----
-
 ## 🎮 **Cómo Jugar**
 
 1. Introduce tu nombre en la pantalla de bienvenida y presiona "Comenzar".
 2. Responde a las 5 preguntas seleccionando la respuesta correcta.
 3. Observa tu puntuación final y verifica si has establecido un nuevo récord.
 
-*(Incluye más detalles o consejos si es necesario.)*
-
 ---
 
 ## 👤 **Autor**
 
-- **Nombre:** [Tu Nombre Completo]  
-- **Correo:** [tuemail@ejemplo.com]  
-- **Portafolio:** [Enlace a tu portafolio o GitHub]
+- **Nombre:** [Jose Rivas Ceacero]  
 
 ---
 
@@ -95,14 +72,4 @@ La aplicación está formada por 3 *activities* e incluye funcionalidades de int
 1. Practicar el desarrollo de aplicaciones Android con múltiples *activities*.  
 2. Implementar almacenamiento y recuperación de datos con SQLite.  
 3. Diseñar una aplicación con experiencia de usuario adaptada a dispositivos móviles.  
-4. Incorporar funcionalidades avanzadas como personalización de UI, sonidos y *toasts*.  
 
----
-
-## 🛡️ **Licencia**
-
-Este proyecto está desarrollado con fines educativos y no tiene una licencia comercial.  
-
----
-
-Si necesitas más ayuda con el diseño o algún aspecto técnico, ¡házmelo saber! 😊
